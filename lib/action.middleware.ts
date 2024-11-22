@@ -35,7 +35,7 @@ type ValidatedActionWithUserFunction<S extends z.ZodType<any, any>, T> = (
   uid: string
 ) => Promise<T>;
 
-export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
+export function withUser<S extends z.ZodType<any, any>, T>(
   schema: S,
   action: ValidatedActionWithUserFunction<S, T>
 ) {

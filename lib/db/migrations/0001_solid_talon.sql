@@ -1,0 +1,1 @@
+ALTER TABLE "sprints" ALTER COLUMN "name" DROP NOT NULL;

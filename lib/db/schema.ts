@@ -48,7 +48,7 @@ export const teamMembers = pgTable("team_members", {
 export const sprints = pgTable("sprints", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 30 }).notNull(),
-  description: varchar("name", { length: 100 }).notNull(),
+  description: varchar("name", { length: 100 }),
   startDate: timestamp("start_date").defaultNow(),
   endDate: timestamp("end_date"),
   teamId: integer("tid")

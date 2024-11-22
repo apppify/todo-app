@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.4.1",
+    "@hookform/resolvers": "^3.9.1",
     "@neondatabase/serverless": "^0.10.3",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
@@ -23,6 +24,7 @@
     "@radix-ui/react-scroll-area": "^1.2.0",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.8.6",
     "@types/react": "npm:types-react@19.0.0-rc.1",
@@ -44,6 +46,7 @@
     "react": "19.0.0-rc-cd22717c-20241013",
     "react-day-picker": "8.10.1",
     "react-dom": "19.0.0-rc-cd22717c-20241013",
+    "react-hook-form": "^7.53.2",
     "server-only": "^0.0.1",
     "svix": "^1.41.0",
     "tailwind-merge": "^2.5.4",

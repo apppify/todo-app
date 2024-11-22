@@ -1,7 +1,7 @@
 
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import NewSprintModal from '@/components/sprints/teams-modal'
+import AddSprintModal from '@/components/sprints/add-sprint-modal'
 import { TeamCombo } from './team-combo'
 import { SprintOptionsDropdown } from './sprint-options-dropdown'
 
@@ -19,7 +19,7 @@ export const Sprints = () => {
         <h1 className="text-3xl font-bold">Sprints</h1>
 
         <div className="inline-flex items-center gap-3">
-          <NewSprintModal />
+          <AddSprintModal />
           <TeamCombo />
           <SprintOptionsDropdown />
         </div>

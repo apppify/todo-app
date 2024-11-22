@@ -1,9 +1,14 @@
 import { db } from "./drizzle";
-import { NewUser, users } from "./schema";
+import { NewSprint, NewUser, sprints, users } from "./schema";
 
 export async function createUser(userData: NewUser) {
   const [user] = await db.insert(users).values(userData).returning();
   return user;
+}
+
+export async function createSprint(sprintData: NewSprint) {
+  const [sprint] = await db.insert(sprints).values(sprintData).returning();
+  return sprint;
 }
 
 // export async function getUser() {
