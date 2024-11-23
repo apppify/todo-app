@@ -1,45 +1,32 @@
-
-import Link from 'next/link'
+'use client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import AddSprintModal from '@/components/sprints/add-sprint-modal'
-import { TeamCombo } from './team-combo'
-import { SprintOptionsDropdown } from './sprint-options-dropdown'
+import { getSprintsWithTeam } from "@/lib/db/queries"
+import Link from 'next/link'
+import { use } from "react"
 
-// This would be replaced with actual database calls
-const mockTeams = [
-  { id: '1', name: 'Development Team', taskCount: 10 },
-  { id: '2', name: 'Marketing Team', taskCount: 5 },
-  { id: '3', name: 'Design Team', taskCount: 8 },
-]
+type SprintListProps = {
+  sprintsPromise: ReturnType<typeof getSprintsWithTeam>
+}
 
-export const Sprints = () => {
+export const SprintList: React.FC<SprintListProps> = ({ sprintsPromise }) => {
+  const sprints = use(sprintsPromise)
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Sprints</h1>
-
-        <div className="inline-flex items-center gap-3">
-          <AddSprintModal />
-          <TeamCombo />
-          <SprintOptionsDropdown />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockTeams.map((team) => (
-          <Link href={`/${team.id}`} key={team.id}>
-            <Card>
-              <CardHeader>
-                <CardTitle>{team.name}</CardTitle>
-                <CardDescription>{team.taskCount} tasks</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>Click to view team tasks</p>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
-    </div>
+    <>
+      {sprints.map((sprint) => (
+        <Link href={`/${sprint.id}`} key={sprint.id}>
+          <Card>
+            <CardHeader>
+              <CardTitle>{sprint.name}</CardTitle>
+              <CardDescription>{sprint.team?.name} team</CardDescription>
+              <CardDescription>{'xx'} tasks</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Click to view team tasks</p>
+            </CardContent>
+          </Card>
+        </Link>
+      ))}
+    </>
   )
 }

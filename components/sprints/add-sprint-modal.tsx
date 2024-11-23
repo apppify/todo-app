@@ -1,5 +1,6 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -7,30 +8,34 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog"
-import { toast } from "@/hooks/use-toast"
-import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { toast } from "@/hooks/use-toast"
+import { Team } from "@/lib/db/schema"
 import { SprintCreateDataType, sprintCreateSchema } from "@/lib/dto"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { cn } from "@/lib/utils"
-import { CalendarIcon } from "lucide-react"
-import { Calendar } from "../ui/calendar"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { addDays, format } from "date-fns"
-import { useState } from "react"
+import { CalendarIcon } from "lucide-react"
+import { Suspense, useState } from "react"
 import { DateRange } from "react-day-picker"
+import { useForm } from "react-hook-form"
+import { Calendar } from "../ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { TeamCombo } from "./team-combo"
 
-export default function AddSprintModal() {
+type AddSprintModalProps = {
+  teams: Promise<Team[]>
+}
+
+export const AddSprintModal: React.FC<AddSprintModalProps> = ({ teams }) => {
 
   const form = useForm<SprintCreateDataType>({
     resolver: zodResolver(sprintCreateSchema),
@@ -78,6 +83,22 @@ export default function AddSprintModal() {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Ship the new feature" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="teamId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Team</FormLabel>
+                  <FormControl>
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <TeamCombo teams={teams} {...field} />
+                    </Suspense>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

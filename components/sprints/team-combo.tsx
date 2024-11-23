@@ -1,9 +1,5 @@
 "use client"
 
-import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
-
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Command,
@@ -18,33 +14,20 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { Team } from "@/lib/db/schema"
+import { cn } from "@/lib/utils"
+import { Check, ChevronsUpDown } from "lucide-react"
+import { use, useState } from "react"
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
+type TeamComboProps = {
+  teams: Promise<Team[]>
+  value?: number
+  onChange?: (teamId: number | undefined) => void
+}
 
-export const TeamCombo = () => {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+export const TeamCombo: React.FC<TeamComboProps> = ({ teams: getTeams, value, onChange }) => {
+  const [open, setOpen] = useState(false)
+  const teams = use(getTeams)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -56,7 +39,7 @@ export const TeamCombo = () => {
           className="w-[200px] justify-between"
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
+            ? teams.find((team) => team.id === value)?.name
             : "All teams"}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -67,22 +50,17 @@ export const TeamCombo = () => {
           <CommandList>
             <CommandEmpty>No framework found.</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {teams.map((team) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
+                  key={team.id}
+                  value={team.id.toString()}
+                  onSelect={(newValue) => {
+                    onChange?.(newValue === value?.toString() ? undefined : +newValue)
                     setOpen(false)
                   }}
                 >
-                  {framework.label}
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      value === framework.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
+                  {team.name}
+                  <Check className={cn("ml-auto", value === team.id ? "opacity-100" : "opacity-0")} />
                 </CommandItem>
               ))}
             </CommandGroup>

@@ -1,5 +1,6 @@
+import { eq } from "drizzle-orm";
 import { db } from "./drizzle";
-import { NewSprint, NewUser, sprints, users } from "./schema";
+import { NewSprint, NewUser, sprints, teams, users } from "./schema";
 
 export async function createUser(userData: NewUser) {
   const [user] = await db.insert(users).values(userData).returning();
@@ -9,6 +10,29 @@ export async function createUser(userData: NewUser) {
 export async function createSprint(sprintData: NewSprint) {
   const [sprint] = await db.insert(sprints).values(sprintData).returning();
   return sprint;
+}
+
+export function getAllTeams() {
+  return db.select().from(teams);
+}
+
+export async function getSprintsWithTeam() {
+  const result = await db
+    .select({
+      id: sprints.id,
+      name: sprints.name,
+      description: sprints.description,
+      startDate: sprints.startDate,
+      endDate: sprints.endDate,
+      team: {
+        id: teams.id,
+        name: teams.name,
+      },
+    })
+    .from(sprints)
+    .leftJoin(teams, eq(sprints.teamId, teams.id));
+
+  return result;
 }
 
 // export async function getUser() {

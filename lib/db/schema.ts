@@ -147,12 +147,9 @@ export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Sprint = typeof sprints.$inferSelect;
 export type NewSprint = typeof sprints.$inferInsert;
-// export type TeamMember = typeof teamMembers.$inferSelect;
-// export type NewTeamMember = typeof teamMembers.$inferInsert;
-// export type ActivityLog = typeof activityLogs.$inferSelect;
-// export type NewActivityLog = typeof activityLogs.$inferInsert;
-// export type Invitation = typeof invitations.$inferSelect;
-// export type NewInvitation = typeof invitations.$inferInsert;
+export type Team = typeof teams.$inferSelect;
+export type NewTeam = typeof teams.$inferInsert;
+
 // export type TeamDataWithMembers = Team & {
 //   teamMembers: (TeamMember & {
 //     user: Pick<User, "id" | "name" | "email">;
