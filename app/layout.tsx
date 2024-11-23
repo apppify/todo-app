@@ -46,7 +46,7 @@ export default function RootLayout({
       lang="en"
       className={cn(`bg-white dark:bg-gray-950 text-black dark:text-white`, geistSans, geistMono, interRegular, offBitDotBold)}
     >
-      <body className="min-h-[100dvh] bg-gray-50">
+      <body className="min-h-[100dvh] bg-gradient-to-br from-purple-50 to-blue-100">
         <ClerkProvider dynamic telemetry={false}>{children}</ClerkProvider>
       </body>
     </html>

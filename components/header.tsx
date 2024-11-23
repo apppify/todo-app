@@ -3,6 +3,7 @@
 import { UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
 import { Logo } from './ui/logo'
+import { Button } from './ui/button'
 
 export const Header = () => {
   return (
@@ -17,9 +18,11 @@ export const Header = () => {
               <span className="text-xl font-bold">Apppify Todo</span>
             </Link>
             <nav className="ml-10 flex items-baseline space-x-4">
-              <Link href="/" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                Sprints
-              </Link>
+
+              <Button variant="link" asChild>
+                <Link href="/">Sprints</Link>
+              </Button>
+
             </nav>
           </div>
 
