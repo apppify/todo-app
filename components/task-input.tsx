@@ -1,19 +1,17 @@
-import React, { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { TodoContext } from '@/providers/todo.provider'
 import { PlusIcon } from 'lucide-react'
+import React, { use, useState } from 'react'
 
-interface TaskInputProps {
-  onAddTask: (taskContent: string) => void
-}
-
-const TaskInput: React.FC<TaskInputProps> = ({ onAddTask }) => {
+const TaskInput = () => {
+  const { addTodo } = use(TodoContext)
   const [taskContent, setTaskContent] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (taskContent.trim()) {
-      onAddTask(taskContent)
+      addTodo(taskContent)
       setTaskContent('')
     }
   }

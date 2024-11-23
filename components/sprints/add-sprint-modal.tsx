@@ -24,11 +24,11 @@ import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { addDays, format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
-import { Suspense, useState } from "react"
-import { DateRange } from "react-day-picker"
+import { Suspense } from "react"
 import { useForm } from "react-hook-form"
 import { Calendar } from "../ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { Textarea } from "../ui/textarea"
 import { TeamCombo } from "./team-combo"
 
 type AddSprintModalProps = {
@@ -36,18 +36,15 @@ type AddSprintModalProps = {
 }
 
 export const AddSprintModal: React.FC<AddSprintModalProps> = ({ teams }) => {
-
   const form = useForm<SprintCreateDataType>({
     resolver: zodResolver(sprintCreateSchema),
     defaultValues: {
       name: "",
-      startDate: new Date(),
+      date: {
+        from: new Date(2022, 0, 20),
+        to: addDays(new Date(2022, 0, 20), 20),
+      }
     },
-  })
-
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
   })
 
   function onSubmit(data: SprintCreateDataType) {
@@ -74,12 +71,12 @@ export const AddSprintModal: React.FC<AddSprintModalProps> = ({ teams }) => {
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="col-span-2">
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Ship the new feature" {...field} />
@@ -107,9 +104,9 @@ export const AddSprintModal: React.FC<AddSprintModalProps> = ({ teams }) => {
 
             <FormField
               control={form.control}
-              name="startDate"
+              name="date"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem>
                   <FormLabel>Due date</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -117,23 +114,23 @@ export const AddSprintModal: React.FC<AddSprintModalProps> = ({ teams }) => {
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
+                            "w-full pl-3 text-left font-normal",
                             !field.value && "text-muted-foreground"
                           )}
                         >
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          {date?.from ? (
-                            date.to ? (
+                          {field.value.from ? (
+                            field.value.to ? (
                               <>
-                                {format(date.from, "LLL dd, y")} -{" "}
-                                {format(date.to, "LLL dd, y")}
+                                {format(field.value.from, "LLL dd, yy")} -{" "}
+                                {format(field.value.to, "LLL dd, yy")}
                               </>
                             ) : (
-                              format(date.from, "LLL dd, y")
+                              format(field.value.from, "LLL dd, y")
                             )
                           ) : (
                             <span>Pick a date</span>
                           )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -141,9 +138,9 @@ export const AddSprintModal: React.FC<AddSprintModalProps> = ({ teams }) => {
                       <Calendar
                         initialFocus
                         mode="range"
-                        defaultMonth={date?.from}
-                        selected={date}
-                        onSelect={setDate}
+                        defaultMonth={field.value.from}
+                        selected={field.value}
+                        onSelect={field.onChange}
                         numberOfMonths={2}
                       />
                     </PopoverContent>
@@ -153,7 +150,28 @@ export const AddSprintModal: React.FC<AddSprintModalProps> = ({ teams }) => {
               )}
             />
 
-            <Button type="submit">Submit</Button>
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="col-span-2">
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Describe the sprint"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="col-span-2 flex justify-end gap-2">
+              <Button type="submit">Submit</Button>
+              <Button type="button" variant="secondary" onClick={() => { }}>Cancel</Button>
+            </div>
           </form>
         </Form>
 

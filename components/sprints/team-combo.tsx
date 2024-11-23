@@ -36,7 +36,7 @@ export const TeamCombo: React.FC<TeamComboProps> = ({ teams: getTeams, value, on
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="min-w-[200px] w-full justify-between"
         >
           {value
             ? teams.find((team) => team.id === value)?.name

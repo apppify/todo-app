@@ -2,7 +2,7 @@
 
 import { withUser } from "../action.middleware";
 import { createSprint } from "../db/queries";
-import { sprintCreateSchema } from "../dto";
+import { SprintCreateDataType, sprintCreateSchema } from "../dto";
 
 export const sprintCreateAction = withUser(
   sprintCreateSchema,
