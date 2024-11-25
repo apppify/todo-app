@@ -97,7 +97,7 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children, userId, pa
 
   // Save state to local storage whenever it changes
   useEffect(() => {
-    console.log('called')
+    // console.log('saving on localstorage')
     storage.set(`todos_${userId}`, todos);
     storage.set(`changeLog_${userId}`, changeLog);
     storage.set(`lastSync_${userId}`, lastSyncTimestamp);

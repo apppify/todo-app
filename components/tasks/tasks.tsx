@@ -8,6 +8,7 @@ import TaskInput from '@/components/task-input'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import { TodoContext } from '@/providers/todo.provider'
+import { InlineMarkdownEditor } from '../editor/inline-markdown-editor'
 
 // This would be replaced with actual database calls
 // const mockDatabaseCalls = {
@@ -100,11 +101,11 @@ import { TodoContext } from '@/providers/todo.provider'
 
 export const Tasks: React.FC = () => {
   const { todos } = use(TodoContext)
-  const [state, setState] = useState(null)
-  const [selectedTask, setSelectedTask] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const searchParams = useSearchParams()
-  const teamId = searchParams.get('team') || '1'
+  // const [state, setState] = useState(null)
+  // const [selectedTask, setSelectedTask] = useState(null)
+  // const [loading, setLoading] = useState(true)
+  // const searchParams = useSearchParams()
+  // const teamId = searchParams.get('team') || '1'
 
   // const onDragEnd = async (result: DropResult) => {
   //   const { destination, source, draggableId } = result
@@ -234,17 +235,9 @@ export const Tasks: React.FC = () => {
   // }
 
   return (
-    <div>
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900">Team Tasks</h1>
-        </div>
-      </header>
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {todos.map((todo) => (
-          <div key={todo.id}>{todo.text}</div>
-        ))}
-        {/* <motion.div
+    <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <InlineMarkdownEditor />
+      {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -268,7 +261,7 @@ export const Tasks: React.FC = () => {
             </div>
           </DragDropContext>
         </motion.div> */}
-        {/* {selectedTask && (
+      {/* {selectedTask && (
           <TaskModal
             isOpen={!!selectedTask}
             onClose={closeTaskModal}
@@ -276,8 +269,7 @@ export const Tasks: React.FC = () => {
             onSave={updateTask}
           />
         )} */}
-        <TaskInput />
-      </main>
-    </div>
+      <TaskInput />
+    </main>
   )
 }
