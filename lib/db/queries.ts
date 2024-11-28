@@ -1,6 +1,7 @@
-import { eq } from "drizzle-orm";
-import { db } from "./drizzle";
-import { NewSprint, NewUser, sprints, teams, users } from "./schema";
+import { eq } from 'drizzle-orm';
+
+import { db } from './drizzle';
+import { NewSprint, NewUser, sprints, teams, users } from './schema';
 
 export async function createUser(userData: NewUser) {
   const [user] = await db.insert(users).values(userData).returning();

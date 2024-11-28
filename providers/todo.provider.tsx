@@ -1,7 +1,8 @@
-'use client'
+'use client';
+
+import React, { use, useEffect, useState } from 'react';
 
 import { storage } from '@/lib/utils';
-import React, { use, useEffect, useState } from 'react';
 
 // types.ts
 interface Todo {
@@ -32,7 +33,6 @@ interface ChangeLogEntry {
 
 type SyncStatus = 'synced' | 'pending' | 'error' | 'conflict';
 
-
 type TodoContextType = {
   todos: Todo[];
   isOnline: boolean;
@@ -46,7 +46,7 @@ type TodoContextType = {
   setSyncStatus: (syncStatus: SyncStatus) => void;
   setChangeLog: (changeLog: ChangeLogEntry[]) => void;
   setLastSyncTimestamp: (lastSyncTimestamp: number | null) => void;
-}
+};
 
 export const TodoContext = React.createContext<TodoContextType>({
   todos: [],
@@ -54,22 +54,22 @@ export const TodoContext = React.createContext<TodoContextType>({
   syncStatus: 'synced',
   changeLog: [],
   lastSyncTimestamp: null,
-  addTodo: (text: string) => { },
-  toggleTodo: (id: number) => { },
-  deleteTodo: (id: number) => { },
-  setIsOnline: (isOnline: boolean) => { },
-  setSyncStatus: (syncStatus: SyncStatus) => { },
-  setChangeLog: (changeLog: ChangeLogEntry[]) => { },
-  setLastSyncTimestamp: (lastSyncTimestamp: number | null) => { },
+  addTodo: (text: string) => {},
+  toggleTodo: (id: number) => {},
+  deleteTodo: (id: number) => {},
+  setIsOnline: (isOnline: boolean) => {},
+  setSyncStatus: (syncStatus: SyncStatus) => {},
+  setChangeLog: (changeLog: ChangeLogEntry[]) => {},
+  setLastSyncTimestamp: (lastSyncTimestamp: number | null) => {},
 });
 
 type TodoProviderProps = React.PropsWithChildren<{
-  userId: string
-  params: Promise<{ sid: string }>
-}>
+  userId: string;
+  params: Promise<{ sid: string }>;
+}>;
 
 export const TodoProvider: React.FC<TodoProviderProps> = ({ children, userId, params }) => {
-  const { sid } = use(params)
+  const { sid } = use(params);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isOnline, setIsOnline] = useState(true);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('synced');
@@ -118,7 +118,7 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children, userId, pa
   const generateVectorClock = (): VectorClock => ({
     timestamp: Date.now(),
     userId: userId,
-    counter: changeLog.length + 1
+    counter: changeLog.length + 1,
   });
 
   const addToChangeLog = (
@@ -133,9 +133,9 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children, userId, pa
       data,
       vectorClock: generateVectorClock(),
       userId: userId,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-    setChangeLog(prev => [...prev, change]);
+    setChangeLog((prev) => [...prev, change]);
   };
 
   const resolveConflicts = (
@@ -147,14 +147,14 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children, userId, pa
     const todoMap = new Map<number, Todo & { source: 'server' | 'local' }>();
 
     // Add server todos to the map
-    serverTodos.forEach(todo => {
+    serverTodos.forEach((todo) => {
       todoMap.set(todo.id, { ...todo, source: 'server' });
     });
 
     // Process local changes
-    localChanges.forEach(change => {
+    localChanges.forEach((change) => {
       const serverTodo = todoMap.get(change.todoId);
-      const localTodo = localTodos.find(t => t.id === change.todoId);
+      const localTodo = localTodos.find((t) => t.id === change.todoId);
 
       if (!serverTodo) {
         // New local todo - keep it
@@ -178,7 +178,7 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children, userId, pa
     setSyncStatus('pending');
     try {
       // Simulated server sync
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // In a real app, this would be an API call returning server todos
       const serverTodos: Todo[] = []; // Simulated server response
@@ -206,49 +206,53 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({ children, userId, pa
       createdBy: userId,
       createdAt: new Date().toISOString(),
       lastModified: Date.now(),
-      version: 1
+      version: 1,
     };
 
-    setTodos(prev => [...prev, todo]);
+    setTodos((prev) => [...prev, todo]);
     addToChangeLog('add', todoId, todo);
   };
 
   const toggleTodo = (id: number): void => {
-    setTodos(prev => prev.map(todo => {
-      if (todo.id === id) {
-        const updated: Todo = {
-          ...todo,
-          completed: !todo.completed,
-          lastModified: Date.now(),
-          version: todo.version + 1
-        };
-        addToChangeLog('update', id, updated);
-        return updated;
-      }
-      return todo;
-    }));
+    setTodos((prev) =>
+      prev.map((todo) => {
+        if (todo.id === id) {
+          const updated: Todo = {
+            ...todo,
+            completed: !todo.completed,
+            lastModified: Date.now(),
+            version: todo.version + 1,
+          };
+          addToChangeLog('update', id, updated);
+          return updated;
+        }
+        return todo;
+      })
+    );
   };
 
   const deleteTodo = (id: number): void => {
-    setTodos(prev => prev.filter(todo => todo.id !== id));
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
     addToChangeLog('delete', id, null);
   };
 
   return (
-    <TodoContext.Provider value={{
-      todos,
-      isOnline,
-      syncStatus,
-      changeLog,
-      lastSyncTimestamp,
-      addTodo,
-      toggleTodo,
-      deleteTodo,
-      setIsOnline,
-      setSyncStatus,
-      setChangeLog,
-      setLastSyncTimestamp,
-    }}>
+    <TodoContext.Provider
+      value={{
+        todos,
+        isOnline,
+        syncStatus,
+        changeLog,
+        lastSyncTimestamp,
+        addTodo,
+        toggleTodo,
+        deleteTodo,
+        setIsOnline,
+        setSyncStatus,
+        setChangeLog,
+        setLastSyncTimestamp,
+      }}
+    >
       {children}
     </TodoContext.Provider>
   );

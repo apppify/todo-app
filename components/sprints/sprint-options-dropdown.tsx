@@ -1,17 +1,14 @@
-import {
-  EllipsisVertical,
-  User
-} from "lucide-react"
+import { EllipsisVertical, User } from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuShortcut,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function SprintOptionsDropdown() {
   return (
@@ -30,5 +27,5 @@ export function SprintOptionsDropdown() {
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

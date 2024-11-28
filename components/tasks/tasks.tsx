@@ -1,14 +1,18 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect, use } from 'react'
-import Column from '@/components/column'
-import TaskModal from '@/components/task-modal'
-import TaskInput from '@/components/task-input'
+import React, { use, useEffect, useState } from 'react';
+
+import { useSearchParams } from 'next/navigation';
+
 // import { v4 as uuidv4 } from 'uuid'
-import { motion } from 'framer-motion'
-import { useSearchParams } from 'next/navigation'
-import { TodoContext } from '@/providers/todo.provider'
-import { InlineMarkdownEditor } from '../editor/inline-markdown-editor'
+import { motion } from 'framer-motion';
+
+import Column from '@/components/column';
+import TaskInput from '@/components/task-input';
+import TaskModal from '@/components/task-modal';
+import { TodoContext } from '@/providers/todo.provider';
+
+import { InlineMarkdownEditor } from '../editor/inline-markdown-editor';
 
 // This would be replaced with actual database calls
 // const mockDatabaseCalls = {
@@ -100,7 +104,7 @@ import { InlineMarkdownEditor } from '../editor/inline-markdown-editor'
 // }
 
 export const Tasks: React.FC = () => {
-  const { todos } = use(TodoContext)
+  const { todos } = use(TodoContext);
   // const [state, setState] = useState(null)
   // const [selectedTask, setSelectedTask] = useState(null)
   // const [loading, setLoading] = useState(true)
@@ -271,5 +275,5 @@ export const Tasks: React.FC = () => {
         )} */}
       <TaskInput />
     </main>
-  )
-}
+  );
+};

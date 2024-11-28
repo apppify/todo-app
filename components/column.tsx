@@ -1,20 +1,21 @@
-import React from 'react'
+import React from 'react';
 
-import Task from './Task'
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
+
+import Task from './Task';
 
 interface ColumnProps {
-  id: string
-  title: string
+  id: string;
+  title: string;
   tasks: {
-    id: string
-    content: string
-    description: string
-    dueDate: string
-    status: string
-    assignedTo: string[]
-  }[]
-  onTaskClick: (taskId: string) => void
+    id: string;
+    content: string;
+    description: string;
+    dueDate: string;
+    status: string;
+    assignedTo: string[];
+  }[];
+  onTaskClick: (taskId: string) => void;
 }
 
 const Column: React.FC<ColumnProps> = ({ id, title, tasks, onTaskClick }) => {
@@ -49,8 +50,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, tasks, onTaskClick }) => {
         )}
       </Droppable>
     </div>
-  )
-}
+  );
+};
 
-export default Column
-
+export default Column;

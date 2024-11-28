@@ -1,5 +1,5 @@
-import { Tasks } from "@/components/tasks/tasks"
+import { Tasks } from '@/components/tasks/tasks';
 
 export default async function HomePage() {
-  return <Tasks />
+  return <Tasks />;
 }

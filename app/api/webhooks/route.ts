@@ -1,15 +1,15 @@
-import { Webhook } from "svix";
-import { headers } from "next/headers";
-import { WebhookEvent } from "@clerk/nextjs/server";
-import { createUser } from "@/lib/db/queries";
+import { headers } from 'next/headers';
+
+import { WebhookEvent } from '@clerk/nextjs/server';
+import { Webhook } from 'svix';
+
+import { createUser } from '@/lib/db/queries';
 
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.CLERK_SIGNING_SECRET;
 
   if (!SIGNING_SECRET) {
-    throw new Error(
-      "Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env.local"
-    );
+    throw new Error('Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env.local');
   }
 
   // Create new Svix instance with secret
@@ -17,13 +17,13 @@ export async function POST(req: Request) {
 
   // Get headers
   const headerPayload = await headers();
-  const svix_id = headerPayload.get("svix-id");
-  const svix_timestamp = headerPayload.get("svix-timestamp");
-  const svix_signature = headerPayload.get("svix-signature");
+  const svix_id = headerPayload.get('svix-id');
+  const svix_timestamp = headerPayload.get('svix-timestamp');
+  const svix_signature = headerPayload.get('svix-signature');
 
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response("Error: Missing Svix headers", {
+    return new Response('Error: Missing Svix headers', {
       status: 400,
     });
   }
@@ -37,13 +37,13 @@ export async function POST(req: Request) {
   // Verify payload with headers
   try {
     evt = wh.verify(body, {
-      "svix-id": svix_id,
-      "svix-timestamp": svix_timestamp,
-      "svix-signature": svix_signature,
+      'svix-id': svix_id,
+      'svix-timestamp': svix_timestamp,
+      'svix-signature': svix_signature,
     }) as WebhookEvent;
   } catch (err) {
-    console.error("Error: Could not verify webhook:", err);
-    return new Response("Error: Verification error", {
+    console.error('Error: Could not verify webhook:', err);
+    return new Response('Error: Verification error', {
       status: 400,
     });
   }
@@ -51,18 +51,16 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   switch (eventType) {
-    case "user.created":
+    case 'user.created':
       const uid = evt.data.id;
       const primaryEmailId = evt.data.primary_email_address_id;
       if (!primaryEmailId) {
-        return new Response("Error: primary email not found", {
+        return new Response('Error: primary email not found', {
           status: 400,
         });
       }
 
-      const email = evt.data.email_addresses.find(
-        (it) => it.id === primaryEmailId
-      )!.email_address;
+      const email = evt.data.email_addresses.find((it) => it.id === primaryEmailId)!.email_address;
 
       await createUser({
         id: uid,
@@ -85,5 +83,5 @@ export async function POST(req: Request) {
       console.log(`Unhandled event type ${eventType}`);
   }
 
-  return new Response("Webhook received", { status: 200 });
+  return new Response('Webhook received', { status: 200 });
 }

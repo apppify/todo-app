@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import { CircleIcon } from 'lucide-react';
 
 export default function NotFound() {
@@ -8,12 +9,10 @@ export default function NotFound() {
         <div className="flex justify-center">
           <CircleIcon className="size-12 text-orange-500" />
         </div>
-        <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
-          Page Not Found
-        </h1>
+        <h1 className="text-4xl font-bold text-gray-900 tracking-tight">Page Not Found</h1>
         <p className="text-base text-gray-500">
-          The page you are looking for might have been removed, had its name
-          changed, or is temporarily unavailable.
+          The page you are looking for might have been removed, had its name changed, or is
+          temporarily unavailable.
         </p>
         <Link
           href="/"

@@ -1,13 +1,12 @@
-import React from 'react'
-import { Badge } from "@/components/ui/badge"
+import React from 'react';
+
+import { Badge } from '@/components/ui/badge';
 
 interface StatusBadgeProps {
-  status: string
-  isSelected: boolean
-  onClick: () => void
+  status: string;
+  isSelected: boolean;
+  onClick: () => void;
 }
-
-
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status, isSelected, onClick }) => {
   return (
@@ -17,8 +16,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, isSelected, onClick }
     >
       {status}
     </Badge>
-  )
-}
+  );
+};
 
-export default StatusBadge
-
+export default StatusBadge;

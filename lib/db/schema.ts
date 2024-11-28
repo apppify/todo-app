@@ -1,64 +1,57 @@
-import { relations } from "drizzle-orm";
-import {
-  integer,
-  jsonb,
-  pgTable,
-  serial,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
-import { z } from "zod";
+import { relations } from 'drizzle-orm';
+import { integer, jsonb, pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { z } from 'zod';
 
-export const users = pgTable("users", {
+export const users = pgTable('users', {
   id: varchar({ length: 50 }).primaryKey().notNull(),
-  email: varchar("email", { length: 255 }).notNull().unique(),
-  first_name: varchar("first_name", { length: 50 }),
-  last_name: varchar("last_name", { length: 50 }),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
-  deletedAt: timestamp("deleted_at"),
-  metadata: jsonb("metadata")
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  first_name: varchar('first_name', { length: 50 }),
+  last_name: varchar('last_name', { length: 50 }),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  deletedAt: timestamp('deleted_at'),
+  metadata: jsonb('metadata')
     .$type<UserMetadata>()
     .notNull()
     .default({
       settings: {
-        language: "en",
-        timezone: "UTC",
+        language: 'en',
+        timezone: 'UTC',
       },
     }),
 });
 
-export const teams = pgTable("teams", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 30 }).notNull(),
-  metadata: jsonb("metadata").$type<TeamMetadata>().notNull().default({}),
+export const teams = pgTable('teams', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 30 }).notNull(),
+  metadata: jsonb('metadata').$type<TeamMetadata>().notNull().default({}),
 });
 
-export const teamMembers = pgTable("team_members", {
-  id: serial("id").primaryKey(),
-  userId: varchar("uid")
+export const teamMembers = pgTable('team_members', {
+  id: serial('id').primaryKey(),
+  userId: varchar('uid')
     .notNull()
     .references(() => users.id),
-  teamId: integer("tid")
+  teamId: integer('tid')
     .notNull()
     .references(() => teams.id),
-  joinedAt: timestamp("joined_at").notNull().defaultNow(),
+  joinedAt: timestamp('joined_at').notNull().defaultNow(),
 });
 
-export const sprints = pgTable("sprints", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 30 }).notNull(),
-  description: varchar("name", { length: 100 }),
-  startDate: timestamp("start_date").defaultNow(),
-  endDate: timestamp("end_date"),
-  teamId: integer("tid")
+export const sprints = pgTable('sprints', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 30 }).notNull(),
+  description: varchar('name', { length: 100 }),
+  startDate: timestamp('start_date').defaultNow(),
+  endDate: timestamp('end_date'),
+  teamId: integer('tid')
     .notNull()
     .references(() => teams.id),
-  userId: varchar("uid")
+  userId: varchar('uid')
     .notNull()
     .references(() => users.id),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
 // relations
@@ -159,7 +152,7 @@ export type NewTeam = typeof teams.$inferInsert;
 const UserMetadataSchema = z.object({
   preferences: z
     .object({
-      theme: z.enum(["light", "dark", "system"]),
+      theme: z.enum(['light', 'dark', 'system']),
     })
     .optional(),
   profile: z
@@ -179,7 +172,7 @@ type UserMetadata = z.infer<typeof UserMetadataSchema>;
 const TeamMetadataSchema = z.object({
   preferences: z
     .object({
-      badgeColor: z.enum(["blue", "red", "green", "custom"]).optional(),
+      badgeColor: z.enum(['blue', 'red', 'green', 'custom']).optional(),
       badgeCustomColor: z.string().optional(),
       isMuted: z.boolean(),
     })

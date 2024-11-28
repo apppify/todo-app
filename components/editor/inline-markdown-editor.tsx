@@ -1,21 +1,25 @@
-import React, { useState, useEffect, useRef, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
+
 import { Card } from '@/components/ui/card';
 
-type Block = {
+import { Paragraph } from './elements/paragraph';
+
+export type Block = {
   id: number;
   content: string;
   type: string;
   editing: boolean;
-}
+};
 
-const initialBlocks = [
-  { id: 1, content: 'Welcome to the editor', type: 'p', editing: false }
-]
+const initialBlocks = [{ id: 1, content: 'Welcome to the editor', type: 'p', editing: false }];
 
-function reducer(state: Block[], action: { action: 'UPDATE_SINGLE_BLOCK' | 'ADD_NEW_BLOCK_AFTER', data: any }) {
+function reducer(
+  state: Block[],
+  action: { action: 'UPDATE_SINGLE_BLOCK' | 'ADD_NEW_BLOCK_AFTER'; data: any }
+) {
   if (action.action === 'UPDATE_SINGLE_BLOCK') {
     const { id, content, type } = action.data;
-    const newState = state.map(block => {
+    const newState = state.map((block) => {
       if (block.id === id) {
         return { ...block, content, type };
       }
@@ -32,9 +36,9 @@ function reducer(state: Block[], action: { action: 'UPDATE_SINGLE_BLOCK' | 'ADD_
       id,
       content,
       type,
-      editing: true
+      editing: true,
     };
-    newState.splice(state.findIndex(block => block.id === afterId) + 1, 0, newBlock);
+    newState.splice(state.findIndex((block) => block.id === afterId) + 1, 0, newBlock);
     return newState;
   }
 
@@ -43,7 +47,7 @@ function reducer(state: Block[], action: { action: 'UPDATE_SINGLE_BLOCK' | 'ADD_
 
 export const InlineMarkdownEditor: React.FC = () => {
   const [blocks, dispatch] = useReducer(reducer, initialBlocks);
-  // const blocksRef = useRef(initialBlocks); //! use useRef to prevent re-rendering 
+  // const blocksRef = useRef(initialBlocks); //! use useRef to prevent re-rendering
 
   const focusBlock = (id: number) => {
     setTimeout(() => {
@@ -52,86 +56,107 @@ export const InlineMarkdownEditor: React.FC = () => {
         blockElement.focus();
       }
     }, 10);
-  }
+  };
 
-  const handleBlockChange = (id: number, contentHtml: string, selectionStart: number | null = null) => {
-    // .replaceAll(/&nbsp;/g, ' ')
+  const handleBlockChange = (
+    id: number,
+    contentHtml: string,
+    selectionStart: number | null = null
+  ) => {
+    //
     for (const block of blocks) {
       if (block.id !== id) continue;
       let typeChanged = false;
-      let newContent = contentHtml;
+      let newContent = contentHtml.replaceAll(/&nbsp;/g, ' ');
       let newType = block.type;
+      let cursorOffset = 0;
+
+      console.log('contentHtml', newContent);
 
       // Handle Markdown syntax
-      if (contentHtml.startsWith('# ')) {
+      if (newContent.startsWith('# ')) {
         newType = 'h1';
-        newContent = contentHtml.slice(2);
+        cursorOffset = 2;
         typeChanged = true;
-      } else if (contentHtml.startsWith('## ')) {
+      } else if (newContent.startsWith('## ')) {
         newType = 'h2';
-        newContent = contentHtml.slice(3);
+        cursorOffset = 3;
         typeChanged = true;
-      } else if (contentHtml.startsWith('- ')) {
+      } else if (newContent.startsWith('[] ')) {
+        newType = 'checkbox';
+        cursorOffset = 3;
+        typeChanged = true;
+      } else if (newContent.startsWith('- ')) {
         newType = 'li';
-        newContent = contentHtml.slice(2);
+        cursorOffset = 2;
         typeChanged = true;
-      } else if (contentHtml.startsWith('> ')) {
+      } else if (newContent.startsWith('> ')) {
         newType = 'blockquote';
-        newContent = contentHtml.slice(2);
+        cursorOffset = 2;
         typeChanged = true;
-      } else if (contentHtml.startsWith('```')) {
+      } else if (newContent.startsWith('```')) {
         newType = 'code';
-        newContent = contentHtml.slice(3);
+        cursorOffset = 3;
         typeChanged = true;
       }
+
+      newContent = newContent.slice(cursorOffset);
 
       // Handle inline formatting
       let formattedContent = newContent;
       const formats = [
         { regex: /\*\*(.*?)\*\*/g, replacement: '<strong>$1</strong>' },
         { regex: /_(.*?)_/g, replacement: '<em>$1</em>' },
-        { regex: /`(.*?)`/g, replacement: '<code>$1</code>' }
+        { regex: /`(.*?)`/g, replacement: '<code>$1</code>' },
       ];
 
       formats.forEach(({ regex, replacement }) => {
         formattedContent = formattedContent.replace(regex, replacement);
       });
 
-      dispatch({ action: 'UPDATE_SINGLE_BLOCK', data: { id, content: formattedContent, type: newType } });
+      dispatch({
+        action: 'UPDATE_SINGLE_BLOCK',
+        data: { id, content: formattedContent, type: newType },
+      });
 
       if (typeChanged) {
         focusBlock(id);
       }
 
       // Set cursor position after formatting
-      // if (selectionStart !== null) {
-      //   setTimeout(() => {
-      //     const element = document.querySelector(`[data-id="${id}"]`);
-      //     if (element) {
-      //       const range = document.createRange();
-      //       const sel = window.getSelection();
+      if (selectionStart !== null) {
+        setTimeout(() => {
+          const element = document.querySelector(`[data-id="${id}"]`);
+          if (element) {
+            const range = document.createRange();
+            const sel = window.getSelection();
 
-      //       // Find the text node
-      //       let textNode = null;
-      //       for (const node of element.childNodes) {
-      //         if (node.nodeType === Node.TEXT_NODE) {
-      //           textNode = node;
-      //           break;
-      //         }
-      //       }
+            if (sel) {
+              // Find the text node
+              let textNode: Text | null = null;
+              for (const node of element.childNodes) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                  textNode = node as Text;
+                  break;
+                }
+              }
 
-      //       if (textNode) {
-      //         const newPosition = Math.min(selectionStart + cursorOffset, textNode.length);
-      //         range.setStart(textNode, newPosition);
-      //         range.setEnd(textNode, newPosition);
-      //         sel.removeAllRanges();
-      //         sel.addRange(range);
-      //       }
-      //     }
-      //   }, 0);
-      // }
+              console.log('textNode', textNode);
 
-    };
+              if (textNode) {
+                // const newPosition = Math.min(selectionStart + cursorOffset, textNode.length);
+                const newPosition = textNode.length;
+                console.log('newPosition', newPosition);
+                range.setStart(textNode, newPosition);
+                range.setEnd(textNode, newPosition);
+                sel.removeAllRanges();
+                sel.addRange(range);
+              }
+            }
+          }
+        }, 0);
+      }
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent, id: number, index: number) => {
@@ -139,13 +164,18 @@ export const InlineMarkdownEditor: React.FC = () => {
       e.preventDefault();
 
       const newBlockId = Date.now();
-      dispatch({ action: 'ADD_NEW_BLOCK_AFTER', data: { id: newBlockId, afterId: id, content: '', type: 'p' } });
+      dispatch({
+        action: 'ADD_NEW_BLOCK_AFTER',
+        data: { id: newBlockId, afterId: id, content: '', type: 'p' },
+      });
       focusBlock(newBlockId);
-
-    } else if (e.key === 'Backspace' && (e.target as HTMLElement).innerText === '' && blocks.length > 1) {
+    } else if (
+      e.key === 'Backspace' &&
+      (e.target as HTMLElement).innerText === '' &&
+      blocks.length > 1
+    ) {
       // e.preventDefault();
       // setBlocks(blocks.filter(block => block.id !== id));
-
       // const prevBlock = document.querySelector(`[data-id="${blocks[index - 1]?.id}"]`) as HTMLElement;
       // if (prevBlock) {
       //   prevBlock.focus();
@@ -203,39 +233,68 @@ export const InlineMarkdownEditor: React.FC = () => {
       },
       onKeyDown: (e: any) => handleKeyDown(e, block.id, index),
       dangerouslySetInnerHTML: { __html: block.content },
-      className: 'outline-none px-4 py-1 min-h-[1.5em] focus:bg-gray-50 rounded'
+      className: 'outline-none px-4 py-1 min-h-[1.5em] focus:bg-gray-50 rounded',
     };
 
     switch (block.type) {
       case 'h1':
-        return <h1 key={block.id} {...commonProps} className="outline-none text-3xl font-bold mb-3 focus:bg-gray-50" />;
+        return (
+          <h1
+            key={block.id}
+            {...commonProps}
+            className="outline-none text-3xl font-bold mb-3 focus:bg-gray-50"
+          />
+        );
       case 'h2':
-        return <h2 key={block.id} {...commonProps} className="outline-none text-2xl font-bold mb-2 focus:bg-gray-50" />;
+        return (
+          <h2
+            key={block.id}
+            {...commonProps}
+            className="outline-none text-2xl font-bold mb-2 focus:bg-gray-50"
+          />
+        );
       case 'li':
         return (
           <div key={block.id} className="flex items-start px-4">
             <span className="mr-2 mt-1">•</span>
-            <div {...commonProps} className="flex-1 outline-none py-1 min-h-[1.5em] focus:bg-gray-50 rounded" />
+            <div
+              {...commonProps}
+              className="flex-1 outline-none py-1 min-h-[1.5em] focus:bg-gray-50 rounded"
+            />
           </div>
         );
       case 'blockquote':
         return (
-          <blockquote key={block.id} {...commonProps}
+          <blockquote
+            key={block.id}
+            {...commonProps}
             className="border-l-4 border-gray-300 pl-4 italic my-2 outline-none py-1 min-h-[1.5em] focus:bg-gray-50 rounded"
           />
         );
+      case 'checkbox':
+        return (
+          <div key={block.id} className="flex items-start px-4">
+            <input type="checkbox" className="mr-2 mt-1" />
+            <div
+              {...commonProps}
+              className="flex-1 outline-none py-1 min-h-[1.5em] focus:bg-gray-50 rounded"
+            />
+          </div>
+        );
       case 'code':
         return (
-          <pre key={block.id} {...commonProps}
+          <pre
+            key={block.id}
+            {...commonProps}
             className="bg-gray-100 font-mono p-2 rounded my-2 outline-none min-h-[1.5em] focus:bg-gray-200"
           />
         );
       default:
-        return <p key={block.id} {...commonProps} />;
+        return <Paragraph key={block.id} {...commonProps} />;
     }
   };
 
-  console.log('rendering')
+  console.log('rendering');
 
   return (
     <Card className="w-full max-w-3xl mx-auto p-4">

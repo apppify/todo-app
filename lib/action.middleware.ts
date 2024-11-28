@@ -1,8 +1,9 @@
-import { z } from "zod";
-// import { User } from "@/lib/db/schema";
-import { currentUser } from "@clerk/nextjs/server";
 // import { getTeamForUser, getUser } from '@/lib/db/queries';
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
+
+// import { User } from "@/lib/db/schema";
+import { currentUser } from '@clerk/nextjs/server';
+import { z } from 'zod';
 
 interface ActionSuccess<T> {
   data: T;
@@ -41,10 +42,7 @@ export function validatedAction<S extends z.ZodType<any, any>, T>(
   };
 }
 
-export type ValidatedActionWithUserFunction<
-  S extends z.ZodType,
-  TReturn = unknown
-> = (
+export type ValidatedActionWithUserFunction<S extends z.ZodType, TReturn = unknown> = (
   validatedData: z.infer<S>,
   formData: FormData,
   userId: string
@@ -53,10 +51,7 @@ export type ValidatedActionWithUserFunction<
 export function withUser<S extends z.ZodType, TReturn = unknown>(
   schema: S,
   action: ValidatedActionWithUserFunction<S, TReturn>
-): (
-  prevState: ActionState<TReturn>,
-  formData: FormData
-) => Promise<ActionState<TReturn>> {
+): (prevState: ActionState<TReturn>, formData: FormData) => Promise<ActionState<TReturn>> {
   return async (
     prevState: ActionState<TReturn>,
     formData: FormData
@@ -66,7 +61,7 @@ export function withUser<S extends z.ZodType, TReturn = unknown>(
 
       if (!clerk_user) {
         return {
-          error: "User is not authenticated",
+          error: 'User is not authenticated',
         };
       }
 
@@ -81,10 +76,7 @@ export function withUser<S extends z.ZodType, TReturn = unknown>(
       return await action(parseResult.data, formData, clerk_user.id);
     } catch (error) {
       return {
-        error:
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred",
+        error: error instanceof Error ? error.message : 'An unexpected error occurred',
       };
     }
   };

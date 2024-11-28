@@ -1,7 +1,8 @@
-'use client'
+'use client';
 
-import { SignIn } from '@clerk/nextjs'
-import React from 'react'
+import React from 'react';
+
+import { SignIn } from '@clerk/nextjs';
 
 export const Login = () => {
   return (
@@ -11,5 +12,5 @@ export const Login = () => {
         <SignIn fallbackRedirectUrl="/dashboard" signUpFallbackRedirectUrl="/onboarding" />
       </div>
     </>
-  )
-}
+  );
+};

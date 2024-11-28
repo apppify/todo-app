@@ -1,61 +1,64 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
+import { Suspense } from 'react';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { addDays, format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog"
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { toast } from "@/hooks/use-toast"
-import { Team } from "@/lib/db/schema"
-import { SprintCreateDataType, sprintCreateSchema } from "@/lib/dto"
-import { cn } from "@/lib/utils"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { addDays, format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
-import { Suspense } from "react"
-import { useForm } from "react-hook-form"
-import { Calendar } from "../ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
-import { Textarea } from "../ui/textarea"
-import { TeamCombo } from "./team-combo"
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { toast } from '@/hooks/use-toast';
+import { Team } from '@/lib/db/schema';
+import { SprintCreateDataType, sprintCreateSchema } from '@/lib/dto';
+import { cn } from '@/lib/utils';
+
+import { Calendar } from '../ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Textarea } from '../ui/textarea';
+import { TeamCombo } from './team-combo';
 
 type AddSprintModalProps = {
-  teams: Promise<Team[]>
-}
+  teams: Promise<Team[]>;
+};
 
 export const AddSprintModal: React.FC<AddSprintModalProps> = ({ teams }) => {
   const form = useForm<SprintCreateDataType>({
     resolver: zodResolver(sprintCreateSchema),
     defaultValues: {
-      name: "",
+      name: '',
       date: {
         from: new Date(2022, 0, 20),
         to: addDays(new Date(2022, 0, 20), 20),
-      }
+      },
     },
-  })
+  });
 
   function onSubmit(data: SprintCreateDataType) {
     toast({
-      title: "You submitted the following values:",
+      title: 'You submitted the following values:',
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
-    })
+    });
   }
 
   return (
@@ -65,9 +68,7 @@ export const AddSprintModal: React.FC<AddSprintModalProps> = ({ teams }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            Add sprint
-          </DialogTitle>
+          <DialogTitle>Add sprint</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -112,20 +113,20 @@ export const AddSprintModal: React.FC<AddSprintModalProps> = ({ teams }) => {
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
-                          variant={"outline"}
+                          variant={'outline'}
                           className={cn(
-                            "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
+                            'w-full pl-3 text-left font-normal',
+                            !field.value && 'text-muted-foreground'
                           )}
                         >
                           {field.value.from ? (
                             field.value.to ? (
                               <>
-                                {format(field.value.from, "LLL dd, yy")} -{" "}
-                                {format(field.value.to, "LLL dd, yy")}
+                                {format(field.value.from, 'LLL dd, yy')} -{' '}
+                                {format(field.value.to, 'LLL dd, yy')}
                               </>
                             ) : (
-                              format(field.value.from, "LLL dd, y")
+                              format(field.value.from, 'LLL dd, y')
                             )
                           ) : (
                             <span>Pick a date</span>
@@ -170,13 +171,13 @@ export const AddSprintModal: React.FC<AddSprintModalProps> = ({ teams }) => {
 
             <div className="col-span-2 flex justify-end gap-2">
               <Button type="submit">Submit</Button>
-              <Button type="button" variant="secondary" onClick={() => { }}>Cancel</Button>
+              <Button type="button" variant="secondary" onClick={() => {}}>
+                Cancel
+              </Button>
             </div>
           </form>
         </Form>
-
       </DialogContent>
     </Dialog>
-  )
-}
-
+  );
+};

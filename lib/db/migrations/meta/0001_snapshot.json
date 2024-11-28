@@ -66,12 +66,8 @@
           "name": "sprints_tid_teams_id_fk",
           "tableFrom": "sprints",
           "tableTo": "teams",
-          "columnsFrom": [
-            "tid"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["tid"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -79,12 +75,8 @@
           "name": "sprints_uid_users_id_fk",
           "tableFrom": "sprints",
           "tableTo": "users",
-          "columnsFrom": [
-            "uid"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["uid"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -131,12 +123,8 @@
           "name": "team_members_uid_users_id_fk",
           "tableFrom": "team_members",
           "tableTo": "users",
-          "columnsFrom": [
-            "uid"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["uid"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -144,12 +132,8 @@
           "name": "team_members_tid_teams_id_fk",
           "tableFrom": "team_members",
           "tableTo": "teams",
-          "columnsFrom": [
-            "tid"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["tid"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -255,9 +239,7 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},

@@ -1,49 +1,60 @@
-import { cn } from "@/lib/utils";
-import { cva, type VariantProps, cx } from "class-variance-authority";
-import { motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 
-const circleProgressVariants = cva(
-  "inline-flex",
-  {
-    variants: {
-      size: {
-        default: "size-9",
-        sm: "size-8",
-        lg: "size-10",
-        icon: "size-9",
-      },
-    },
-    defaultVariants: {
-      size: "default",
-    },
-  }
-)
+import { type VariantProps, cva, cx } from 'class-variance-authority';
+import { motion } from 'framer-motion';
 
-interface CircularProgressProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof circleProgressVariants> {
+import { cn } from '@/lib/utils';
+
+const circleProgressVariants = cva('inline-flex', {
+  variants: {
+    size: {
+      default: 'size-9',
+      sm: 'size-8',
+      lg: 'size-10',
+      icon: 'size-9',
+    },
+  },
+  defaultVariants: {
+    size: 'default',
+  },
+});
+
+interface CircularProgressProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof circleProgressVariants> {
   value: number; // Something between 1 and 100
   strokeWidth: number;
 }
 
-const CircularProgress: React.FC<CircularProgressProps> = ({ value, strokeWidth, size, className, ...divProps }) => {
+const CircularProgress: React.FC<CircularProgressProps> = ({
+  value,
+  strokeWidth,
+  size,
+  className,
+  ...divProps
+}) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [sz, setSz] = useState(0)
+  const [sz, setSz] = useState(0);
 
   useEffect(() => {
-    if (!containerRef.current) return
+    if (!containerRef.current) return;
 
-    setSz(containerRef.current.getBoundingClientRect().width)
-  }, [containerRef])
+    setSz(containerRef.current.getBoundingClientRect().width);
+  }, [containerRef]);
 
   const percentage = Math.min(Math.max(value, 0), 100);
   const radius = (sz - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (percentage / 100) * circumference;
 
-  circleProgressVariants()
+  circleProgressVariants();
 
   return (
-    <div ref={containerRef} className={cn(circleProgressVariants({ size, className }))} {...divProps}>
+    <div
+      ref={containerRef}
+      className={cn(circleProgressVariants({ size, className }))}
+      {...divProps}
+    >
       {sz > 0 && (
         <svg width={sz} height={sz} xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -65,7 +76,9 @@ const CircularProgress: React.FC<CircularProgressProps> = ({ value, strokeWidth,
             textAnchor="middle"
             alignmentBaseline="middle"
             className="text-[12px] font-bold"
-          >{value}</text>
+          >
+            {value}
+          </text>
           <circle
             cx={sz / 2}
             cy={sz / 2}
@@ -84,7 +97,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({ value, strokeWidth,
             r={radius}
             strokeLinecap="round"
             className="fill-none"
-            style={{ stroke: "url(#circle-progress)", strokeWidth }}
+            style={{ stroke: 'url(#circle-progress)', strokeWidth }}
             initial={{
               strokeDashoffset: circumference,
               strokeDasharray: circumference,

@@ -1,6 +1,10 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
+import { use, useState } from 'react';
+
+import { Check, ChevronsUpDown } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -8,26 +12,20 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { Team } from "@/lib/db/schema"
-import { cn } from "@/lib/utils"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { use, useState } from "react"
+} from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Team } from '@/lib/db/schema';
+import { cn } from '@/lib/utils';
 
 type TeamComboProps = {
-  teams: Promise<Team[]>
-  value?: number
-  onChange?: (teamId: number | undefined) => void
-}
+  teams: Promise<Team[]>;
+  value?: number;
+  onChange?: (teamId: number | undefined) => void;
+};
 
 export const TeamCombo: React.FC<TeamComboProps> = ({ teams: getTeams, value, onChange }) => {
-  const [open, setOpen] = useState(false)
-  const teams = use(getTeams)
+  const [open, setOpen] = useState(false);
+  const teams = use(getTeams);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -38,9 +36,7 @@ export const TeamCombo: React.FC<TeamComboProps> = ({ teams: getTeams, value, on
           aria-expanded={open}
           className="min-w-[200px] w-full justify-between"
         >
-          {value
-            ? teams.find((team) => team.id === value)?.name
-            : "All teams"}
+          {value ? teams.find((team) => team.id === value)?.name : 'All teams'}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -55,12 +51,14 @@ export const TeamCombo: React.FC<TeamComboProps> = ({ teams: getTeams, value, on
                   key={team.id}
                   value={team.id.toString()}
                   onSelect={(newValue) => {
-                    onChange?.(newValue === value?.toString() ? undefined : +newValue)
-                    setOpen(false)
+                    onChange?.(newValue === value?.toString() ? undefined : +newValue);
+                    setOpen(false);
                   }}
                 >
                   {team.name}
-                  <Check className={cn("ml-auto", value === team.id ? "opacity-100" : "opacity-0")} />
+                  <Check
+                    className={cn('ml-auto', value === team.id ? 'opacity-100' : 'opacity-0')}
+                  />
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -68,5 +66,5 @@ export const TeamCombo: React.FC<TeamComboProps> = ({ teams: getTeams, value, on
         </Command>
       </PopoverContent>
     </Popover>
-  )
-}
+  );
+};

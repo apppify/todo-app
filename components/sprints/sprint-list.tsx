@@ -1,16 +1,19 @@
-'use client'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { CircularProgress } from "@/components/ui/circule-progress"
-import { getSprintsWithTeam } from "@/lib/db/queries"
-import Link from 'next/link'
-import { use } from "react"
+'use client';
+
+import { use } from 'react';
+
+import Link from 'next/link';
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { CircularProgress } from '@/components/ui/circule-progress';
+import { getSprintsWithTeam } from '@/lib/db/queries';
 
 type SprintListProps = {
-  sprintsPromise: ReturnType<typeof getSprintsWithTeam>
-}
+  sprintsPromise: ReturnType<typeof getSprintsWithTeam>;
+};
 
 export const SprintList: React.FC<SprintListProps> = ({ sprintsPromise }) => {
-  const sprints = use(sprintsPromise)
+  const sprints = use(sprintsPromise);
 
   return (
     <>
@@ -33,5 +36,5 @@ export const SprintList: React.FC<SprintListProps> = ({ sprintsPromise }) => {
         </Link>
       ))}
     </>
-  )
-}
+  );
+};

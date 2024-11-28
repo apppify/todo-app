@@ -1,20 +1,29 @@
-import React from 'react'
-import { Draggable } from 'react-beautiful-dnd'
-import { motion } from 'framer-motion'
-import { CalendarIcon, UserIcon } from 'lucide-react'
+import React from 'react';
+
+import { motion } from 'framer-motion';
+import { CalendarIcon, UserIcon } from 'lucide-react';
+import { Draggable } from 'react-beautiful-dnd';
 
 interface TaskProps {
-  id: string
-  index: number
-  content: string
-  description: string
-  dueDate: string
-  status: string
-  assignedTo: string[] | string
-  onClick: () => void
+  id: string;
+  index: number;
+  content: string;
+  description: string;
+  dueDate: string;
+  status: string;
+  assignedTo: string[] | string;
+  onClick: () => void;
 }
 
-const Task: React.FC<TaskProps> = ({ id, index, content, dueDate, assignedTo, status, onClick }) => {
+const Task: React.FC<TaskProps> = ({
+  id,
+  index,
+  content,
+  dueDate,
+  assignedTo,
+  status,
+  onClick,
+}) => {
   const assignedToArray = Array.isArray(assignedTo) ? assignedTo : [assignedTo].filter(Boolean);
 
   return (
@@ -41,11 +50,17 @@ const Task: React.FC<TaskProps> = ({ id, index, content, dueDate, assignedTo, st
               <span>{assignedToArray.join(', ')}</span>
             </div>
             <div className="flex items-center">
-              <span className={`px-2 py-1 rounded-full text-xs font-semibold ${status === 'To Do' ? 'bg-blue-100 text-blue-800' :
-                  status === 'In Progress' ? 'bg-yellow-100 text-yellow-800' :
-                    status === 'Done' ? 'bg-green-100 text-green-800' :
-                      'bg-gray-100 text-gray-800'
-                }`}>
+              <span
+                className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                  status === 'To Do'
+                    ? 'bg-blue-100 text-blue-800'
+                    : status === 'In Progress'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : status === 'Done'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-gray-100 text-gray-800'
+                }`}
+              >
                 {status}
               </span>
             </div>
@@ -53,8 +68,7 @@ const Task: React.FC<TaskProps> = ({ id, index, content, dueDate, assignedTo, st
         </motion.div>
       )}
     </Draggable>
-  )
-}
+  );
+};
 
-export default Task
-
+export default Task;
