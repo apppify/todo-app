@@ -51,6 +51,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         offBitDotBold
       )}
     >
+      {/* <head>
+        <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script>
+      </head> */}
       <body className="min-h-[100dvh] bg-gradient-to-br from-purple-50 to-blue-100">
         <ClerkProvider dynamic telemetry={false}>
           {children}
