@@ -1,10 +1,10 @@
 'use client';
 
-import { TodoContext } from '@/providers/todo.provider';
 import React, { use, useEffect, useRef } from 'react';
+
+import { TodoContext } from '@/providers/todo.provider';
+
 import { Editor } from '../editor/editor';
-
-
 
 export const Tasks: React.FC = () => {
   const editorWrapper = useRef<HTMLDivElement>(null);
