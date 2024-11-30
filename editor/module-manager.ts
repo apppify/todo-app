@@ -2,7 +2,7 @@ import { EditorConfig } from './editor';
 import type { ModuleClassInstanceType, ModuleClassType, ModuleName } from './modules';
 import modules from './modules';
 import BaseModule from './modules/base';
-import RenderModule from './modules/renderer';
+import RenderModule from './modules/render';
 
 type ModuleLoadQueue = { moduleClass: ModuleClassType; dependencies: ModuleName[] };
 
@@ -38,7 +38,7 @@ export class ModuleManager {
 
   private render() {
     const renderModule = this.modules.get('RenderModule') as RenderModule;
-    return renderModule.render(this.config.data.blocks);
+    return renderModule.render(this.config.data?.blocks ?? []);
   }
 
   private async startPrepare() {

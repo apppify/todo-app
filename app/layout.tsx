@@ -5,6 +5,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 
 import { cn } from '@/lib/utils';
 
+import '../editor/styles/main.css';
 import './globals.css';
 
 export const metadata: Metadata = {

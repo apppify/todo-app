@@ -1,28 +1,17 @@
-import { Block } from './block';
+import { BlockJson } from './block';
 import { ModuleManager } from './module-manager';
 
 type OutputData = {
-  blocks: Block[];
+  blocks: BlockJson[];
   timestamp: number;
 };
 
 export type EditorConfig = {
   holder: HTMLElement;
   isReadOnly: boolean;
-  data: OutputData;
+  data?: OutputData | null;
   onReady: () => void;
   onFailure: (error: Error) => void;
-};
-
-const defaultData: OutputData = {
-  blocks: [
-    {
-      id: '1',
-      type: 'paragraph',
-      content: 'Hello World',
-    },
-  ],
-  timestamp: Date.now(),
 };
 
 export class Editor {
@@ -39,7 +28,7 @@ export class Editor {
 
     return {
       isReadOnly: config?.isReadOnly ?? false,
-      data: config?.data ?? defaultData,
+      data: config?.data,
       holder: config?.holder ?? tmp,
       onReady: config?.onReady ?? onReady,
       onFailure: config?.onFailure ?? onFailure,

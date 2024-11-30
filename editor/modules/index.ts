@@ -1,7 +1,6 @@
-import BlockManager from './block-manager';
 import Caret from './caret';
 import LoggerModule from './logger';
-import RenderModule from './renderer';
+import RenderModule from './render';
 import UIModule from './ui';
 
 const modules = {
@@ -9,7 +8,6 @@ const modules = {
   UIModule,
   Caret,
   RenderModule,
-  BlockManager,
 };
 
 export default modules;

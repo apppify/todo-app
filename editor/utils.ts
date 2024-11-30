@@ -1,8 +1,10 @@
-export const make = (
+import { nanoid } from 'nanoid';
+
+export function make(
   tagName: keyof HTMLElementTagNameMap,
   classNames: string | (string | undefined)[] | null = null,
   attributes: object = {}
-): HTMLElement => {
+): HTMLElement {
   const el = document.createElement(tagName);
 
   if (Array.isArray(classNames)) {
@@ -20,4 +22,19 @@ export const make = (
   // }
 
   return el;
-};
+}
+
+export function prepend(parent: Element, elements: Element | Element[]): void {
+  if (Array.isArray(elements)) {
+    elements = elements.reverse();
+    elements.forEach((el) => parent.prepend(el));
+  } else {
+    parent.prepend(elements);
+  }
+}
+
+export function generateBlockId(): string {
+  const idLen = 10;
+
+  return nanoid(idLen);
+}

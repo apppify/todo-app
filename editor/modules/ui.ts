@@ -1,4 +1,5 @@
 import { ModuleName } from '.';
+import * as _ from '../utils';
 import { make } from '../utils';
 import BaseModule from './base';
 import LoggerModule from './logger';
@@ -6,7 +7,7 @@ import LoggerModule from './logger';
 export default class UIModule extends BaseModule {
   static dependencies: ModuleName[] = ['LoggerModule'];
   private holder!: HTMLElement;
-  private wrapper!: HTMLElement;
+  public wrapper!: HTMLElement;
   private logger!: LoggerModule;
 
   async initialize() {
