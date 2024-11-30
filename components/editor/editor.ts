@@ -1,5 +1,5 @@
 import { Block } from './block';
-import { EditorCore } from './core';
+import { ModuleManager } from './module-manager';
 
 type OutputData = {
   blocks: Block[];
@@ -28,7 +28,7 @@ const defaultData: OutputData = {
 export class Editor {
   constructor(options?: Partial<EditorConfig>) {
     const config = this.statructConfiguration(options);
-    const editor = new EditorCore(config);
+    const editor = new ModuleManager(config);
   }
 
   private statructConfiguration(config?: Partial<EditorConfig>) {

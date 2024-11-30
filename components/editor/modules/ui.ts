@@ -1,25 +1,31 @@
-import Module, { BaseModule } from '../__module';
+import { ModuleName } from '.';
 import { make } from '../utils';
+import BaseModule from './base';
+import LoggerModule from './logger';
 
-interface UINodes {
-  holder: HTMLElement;
-  wrapper: HTMLElement;
-}
+export default class UIModule extends BaseModule {
+  static dependencies: ModuleName[] = ['LoggerModule'];
+  private holder!: HTMLElement;
+  private wrapper!: HTMLElement;
+  private logger!: LoggerModule;
 
-export default class UI extends Module<UINodes> implements BaseModule {
-  async prepare() {
+  async initialize() {
+    this.logger = this.getDependencies<LoggerModule>('LoggerModule');
+
     this.make();
+
+    this.logger.log('🟢 UI module initialized');
   }
 
   private make() {
-    this.nodes.holder = this.config.holder;
-    this.nodes.wrapper = make('div', 'editor-wrapper');
+    this.holder = this.config.holder;
+    this.wrapper = make('div', 'editor-wrapper');
 
     // test
-    this.nodes.wrapper.innerHTML = `
+    this.wrapper.innerHTML = `
       <div class="editor-toolbar">test</div>
     `;
 
-    this.nodes.holder.appendChild(this.nodes.wrapper);
+    this.holder.appendChild(this.wrapper);
   }
 }

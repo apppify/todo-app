@@ -1,7 +1,7 @@
-import Module, { BaseModule } from '../__module';
+import BaseModule from './base';
 
-export default class Caret extends Module implements BaseModule {
-  async prepare() {
+export default class Caret extends BaseModule {
+  async initialize() {
     // TODO
   }
 }
